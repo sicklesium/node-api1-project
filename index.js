@@ -108,3 +108,20 @@ server.put('/api/users/:id', (req, res) => {
         res.status(400).json({ errorMessage: "Please provide name and bio for the user." });
     }
 });
+
+// DELETE request for a specific user
+server.delete('/api/users/:id', (req, res) => {
+    const id = req.params.id;
+
+    db.remove(id)
+        .then(deletedUser => {
+            if (deletedUser) {
+                res.status(201).json({ success: true, deletedUser });
+            } else {
+                res.status(404).json({ errorMessage: "The user with the specified ID does not exist." })
+            }
+        })
+        .catch(err => {
+            res.status(500).json({ errorMessage: "The user could not be removed." })
+        })
+})
